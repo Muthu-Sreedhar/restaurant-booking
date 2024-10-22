@@ -1,7 +1,7 @@
 // src/pages/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Container, Typography, Snackbar, IconButton, Grid, Box, Link } from '@mui/material';
+import { TextField, Button, Container, Typography, Snackbar, IconButton, Grid, Box, Link, keyframes } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
@@ -19,6 +19,24 @@ const Login: React.FC = () => {
     const [message, setMessage] = useState<any>('');
     const [errorMessage, setErrorMessage] = useState<any>('')
     const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const handleSignUp = () => { navigate('/signup') };
+    const handleForgotPassword = () => { navigate('/forgotpassword') };
+
+    const fadeIn = keyframes`
+        from { opacity: 0; }
+        to { opacity: 1; }
+        `;
+
+    const slideUp = keyframes`
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+    `;
+
+    const bounce = keyframes`
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    `;
 
     const handleCheckEmail = async () => {
         const CheckEmailrequest = {
@@ -109,10 +127,7 @@ const Login: React.FC = () => {
         setSnackbarOpen(false);
     };
 
-    const handleSignUp = () => {
-        navigate('/signup');
-    };
-
+    
     return (
         <>
 
@@ -123,12 +138,21 @@ const Login: React.FC = () => {
                         backgroundRepeat: 'no-repeat',
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
+                        animation: `${fadeIn} 1.5s ease-out`,
                     }}
                 />
-                <Grid item xs={12} sm={8} md={5} component={Box} display="flex" flexDirection="column" justifyContent="center" p={5}>
+                <Grid item xs={12} sm={8} md={5} component={Box} display="flex" flexDirection="column" justifyContent="center" p={5}
+                     sx={{
+                        animation: `${slideUp} 1s ease-out`,
+                      }}
+                >
                     {/* <Typography variant="h4" fontWeight="bold" color="secondary" gutterBottom> Logo Here </Typography> */}
                     <Typography variant="h5" gutterBottom> Welcome back !!</Typography>
-                    <Typography variant="h3" fontWeight="bold" gutterBottom> Log In </Typography>
+                    <Typography variant="h3" fontWeight="bold" gutterBottom
+                        sx={{
+                            animation: `${bounce} 2s infinite ease-in-out`,
+                        }}
+                    > Log In </Typography>
 
 
                     <TextField variant="outlined" margin="normal" required fullWidth label="Email" type="email"
@@ -143,7 +167,7 @@ const Login: React.FC = () => {
                     }
                     {storeData !== null &&
                         <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Link href="#" underline="hover" variant="body2">
+                            <Link underline="hover" variant="body2" onClick={handleForgotPassword}>
                                 Forgot Password?
                             </Link>
                         </Box>
@@ -179,8 +203,17 @@ const Login: React.FC = () => {
                             </Link>
                         </Typography>
                     </Box> */}
-                </Grid>
 
+<Box display="flex" justifyContent="center" alignItems="center">
+                    <Typography variant="body2">
+                        Don't have an account yet?{' '}
+                        <Link underline="hover" onClick={handleSignUp}>
+                        Sign up here
+                        </Link>
+                    </Typography>
+                    </Box>
+                </Grid>
+                
 
             </Grid>
             <Snackbar
