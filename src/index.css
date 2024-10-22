@@ -1,0 +1,13 @@
+html {
+  font-size: 14px !important;
+}
+::-webkit-scrollbar {
+  width: 3px !important;
+  height: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
