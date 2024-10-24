@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
                         sx={listItemStyles(0)}
                     >
                         {!reduceSideBar ? (
-                            <span className="material-symbols-outlined">home</span>
+                            <span className="material-symbols-outlined" title='Home'>home</span>
                         ) : (
                             <>
                                 <span className="material-symbols-outlined">home</span>
@@ -51,10 +51,10 @@ const Sidebar: React.FC = () => {
                         sx={listItemStyles(1)}
                     >
                         {!reduceSideBar ? (
-                            <span className="material-symbols-outlined">dns</span>
+                            <span className="material-symbols-outlined" title='About'>dns</span>
                         ) : (
                             <>
-                                <span className="material-symbols-outlined">dns</span>
+                                <span className="material-symbols-outlined" >dns</span>
                                 &nbsp;<ListItemText primary="About" />
                             </>
                         )}
@@ -66,7 +66,7 @@ const Sidebar: React.FC = () => {
                         sx={listItemStyles(2)}
                     >
                         {!reduceSideBar ? (
-                            <span className="material-symbols-outlined">person</span>
+                            <span className="material-symbols-outlined" title='User'>person</span>
                         ) : (
                             <>
                                 <span className="material-symbols-outlined">person</span>

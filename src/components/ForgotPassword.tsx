@@ -1,21 +1,43 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Box, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ForgotPass from "../../src/assets/images/FP-1.jpg";
-
+import { useLocation } from 'react-router-dom';
 const ForgotPassword: React.FC = () => {
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const location = useLocation();
+    const email = location.state?.Data;
+
+    const [password, setPassword] = useState<any>({
+        "newPassword": "",
+        "confirmPassword": ""
+    })
+    console.log('password', password);
     const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
+    const API_URL = process.env.REACT_APP_API_URL;
+    const handleSubmit = async () => {
+        let request = {
+            "Username": email?.Username,
+            "Email": email?.Email,
+            "NewPassword": password?.newPassword,
+            "ConfirmPassword": password?.confirmPassword
+        }
+        if (password?.newPassword === password?.confirmPassword) {
+            await axios.patch(`${API_URL}/appuser/updatepassword`, request)?.then((response: any) => {
+                if (response?.status === 200) {
+                    setSuccessMessage('Password Changed Successfully');
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 2000);
+                }
+            })?.catch((error: any) => {
+                // if (error?.response?.status ===) {
+                setSuccessMessage('Passwords do not match');
+                // }
+            })
 
-    const handleSubmit = () => {
-        if (newPassword === confirmPassword) {
-            setSuccessMessage('Password Changed Successfully');
-            setTimeout(() => {
-                navigate('/login');
-            }, 2000);
         } else {
             setSuccessMessage('Passwords do not match');
         }
@@ -66,8 +88,11 @@ const ForgotPassword: React.FC = () => {
                         fullWidth
                         label="New Password"
                         type="password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
+                        value={password?.newPassword}
+                        name='newPassword'
+                        onChange={(newvalue: any) => {
+                            setPassword((prev: any) => ({ ...prev, "newPassword": newvalue?.target?.value }))
+                        }}
                     />
                     <TextField
                         variant="outlined"
@@ -76,13 +101,17 @@ const ForgotPassword: React.FC = () => {
                         fullWidth
                         label="Confirm Password"
                         type="password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        value={password?.confirmPassword}
+                        name='confirmPassword'
+                        onChange={(newvalue: any) => {
+                            setPassword((prev: any) => ({ ...prev, "confirmPassword": newvalue?.target?.value }))
+                        }}
                     />
                     <Button
                         fullWidth
                         variant="contained"
                         color="primary"
+                        disabled={!password}
                         onClick={handleSubmit}
                         sx={{ mt: 2, mb: 2, py: 1.5 }}
                     >
@@ -90,10 +119,10 @@ const ForgotPassword: React.FC = () => {
                     </Button>
                     {
                         successMessage && (
-                        <Typography color="green" variant="body2" align="center">
-                            {successMessage}
-                        </Typography>
-                    )}
+                            <Typography color={successMessage ? "green" : "red"} variant="body2" align="center">
+                                {successMessage}
+                            </Typography>
+                        )}
                 </motion.div>
             </Grid>
         </Grid>
