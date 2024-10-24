@@ -22,8 +22,10 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const isActive = true
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState({ message: '', severity: 'success', open: false });
+  const API_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
   const handleSignUp = async () => {
@@ -32,13 +34,13 @@ const SignUp: React.FC = () => {
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\d{10}$/;
 
-    if (!emailRegex.test(email)) {
-      setNotification({ message: 'Invalid email format', severity: 'error', open: true });
-      return;
-    }
+    // if (!emailRegex.test(email)) {
+    //   setNotification({ message: 'Invalid email format', severity: 'error', open: true });
+    //   return;
+    // }
 
     if (!phoneRegex.test(phoneNumber)) {
       setNotification({ message: 'Invalid phone number format', severity: 'error', open: true });
@@ -46,15 +48,33 @@ const SignUp: React.FC = () => {
     }
 
     setLoading(true);
-    try {
-      await axios.post('/api/signup', { username, email, password, phoneNumber });
-      setNotification({ message: 'Sign Up Successful', severity: 'success', open: true });
-      navigate('/login');
-    } catch (error) {
-      setNotification({ message: 'Sign Up Failed', severity: 'error', open: true });
-    } finally {
-      setLoading(false);
-    }
+
+    await axios.post(`${API_URL}/appuser/createappuser`, {
+      "Username": username,
+      "Email": email,
+      "Password": password,
+      "ConfirmPassword": confirmPassword,
+      "PhoneNumber": phoneNumber,
+      "IsActive": true
+    })?.then((response: any) => {
+      if (response?.status === 200) {
+        setNotification({ message: 'Sign Up Successful', severity: 'success', open: true });
+        navigate('/login');
+      }
+      else if (response?.status === 400) {
+        setNotification({ message: 'Sign Up Successful', severity: 'success', open: true });
+      }
+    }).catch((error) => {
+      if (error.response?.status === 404) {
+        setNotification({ message: 'Sign Up Failed', severity: 'error', open: true });
+      }
+      else if (error.response?.status === 404) {
+        setNotification({ message: '', severity: 'error', open: true });
+      }
+      else {
+        setNotification({ message: 'An error occurred. Please try again.', severity: 'error', open: true });
+      }
+    })
   };
 
   const handleLogIn = () => {
@@ -67,8 +87,8 @@ const SignUp: React.FC = () => {
 
   return (
     <Grid container sx={{ height: '100vh' }}>
-      <Grid 
-        item 
+      <Grid
+        item
         xs={12} sm={7} md={7} lg={7} xl={7}
         sx={{
           backgroundImage: `url(${SignUpImage})`,
@@ -78,12 +98,12 @@ const SignUp: React.FC = () => {
           animation: `${fadeIn} 1.5s ease-out`
         }}
       />
-      <Grid 
-        item 
-        xs={12} sm={5} md={5} lg={5} xl={3.5} 
-        container 
-        display="flex" 
-        alignItems="center" 
+      <Grid
+        item
+        xs={12} sm={5} md={5} lg={5} xl={3.5}
+        container
+        display="flex"
+        alignItems="center"
         justifyContent="center"
       >
         <Box sx={{ width: '80%', animation: `${fadeIn} 1.5s ease-out` }}>
@@ -165,9 +185,17 @@ const SignUp: React.FC = () => {
       </Grid>
 
       {/* Notification Snackbar */}
-      <Snackbar open={notification.open} autoHideDuration={6000} onClose={handleCloseNotification}>
-        <Alert onClose={handleCloseNotification} severity={notification.severity as any} sx={{ width: '100%' }}>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}>
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity as any}
+          sx={{ width: '100%' }}>
           {notification.message}
+
         </Alert>
       </Snackbar>
     </Grid>
