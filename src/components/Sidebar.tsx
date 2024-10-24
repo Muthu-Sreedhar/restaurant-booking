@@ -94,6 +94,7 @@ const Sidebar: React.FC = () => {
                 )}
             </Box>
         </Grid2>
+        
     );
 };
 
