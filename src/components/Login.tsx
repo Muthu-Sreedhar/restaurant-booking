@@ -19,9 +19,13 @@ const Login: React.FC = () => {
     const [message, setMessage] = useState<any>('');
     const [errorMessage, setErrorMessage] = useState<any>('')
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+    const API_URL = process.env.REACT_APP_API_URL;
+    const [emailData, setEmailData] = useState(null)
     const handleSignUp = () => { navigate('/signup') };
-    const handleForgotPassword = () => { navigate('/forgotpassword') };
+    const handleForgotPassword = () => {
+        navigate('/forgotpassword', { state: { Data:emailData } });
+    };
+
 
     const fadeIn = keyframes`
         from { opacity: 0; }
@@ -44,9 +48,12 @@ const Login: React.FC = () => {
             // Password: password,
         };
 
-        await axios.post('http://localhost:6002/users/checkappuser', CheckEmailrequest)
+        console.log('aaaa', `${API_URL}/users/checkappuser`);
+        await axios.post(`${API_URL}/users/checkappuser`, CheckEmailrequest)
+
             ?.then((checkEmailResponse: any) => {
                 if (checkEmailResponse?.status === 200) {
+                    setEmailData(checkEmailResponse?.data?.outputResponse)
                     setStoreData(checkEmailResponse?.data?.outputResponse)
                 }
             })
@@ -70,7 +77,7 @@ const Login: React.FC = () => {
             Password: password,
         };
 
-        await axios.post('http://localhost:6002/users/checkpassword', checkPassword)
+        await axios.post(`${API_URL}/users/checkpassword`, checkPassword)
             .then((checkPasswordResponse: any) => {
                 if (checkPasswordResponse?.status === 200) {
                     console.log("222");
@@ -127,7 +134,7 @@ const Login: React.FC = () => {
         setSnackbarOpen(false);
     };
 
-    
+
     return (
         <>
 
@@ -142,9 +149,9 @@ const Login: React.FC = () => {
                     }}
                 />
                 <Grid item xs={12} sm={8} md={5} component={Box} display="flex" flexDirection="column" justifyContent="center" p={5}
-                     sx={{
+                    sx={{
                         animation: `${slideUp} 1s ease-out`,
-                      }}
+                    }}
                 >
                     {/* <Typography variant="h4" fontWeight="bold" color="secondary" gutterBottom> Logo Here </Typography> */}
                     <Typography variant="h5" gutterBottom> Welcome back !!</Typography>
@@ -204,16 +211,16 @@ const Login: React.FC = () => {
                         </Typography>
                     </Box> */}
 
-<Box display="flex" justifyContent="center" alignItems="center">
-                    <Typography variant="body2">
-                        Don't have an account yet?{' '}
-                        <Link underline="hover" onClick={handleSignUp}>
-                        Sign up here
-                        </Link>
-                    </Typography>
+                    <Box display="flex" justifyContent="center" alignItems="center">
+                        <Typography variant="body2">
+                            Don't have an account yet?{' '}
+                            <Link underline="hover" onClick={handleSignUp}>
+                                Sign up here
+                            </Link>
+                        </Typography>
                     </Box>
                 </Grid>
-                
+
 
             </Grid>
             <Snackbar

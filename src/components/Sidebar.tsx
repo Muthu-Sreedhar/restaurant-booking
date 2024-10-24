@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
                 <Stack spacing={!reduceSideBar ? 1 : 0} color={"#757575"}>
                     <ListItemButton
                         component={Link}
-                        to="/"
+                        to="/home"
                         onClick={() => handleListItemClick(0)} // 0 for Home
                         sx={{
                             backgroundColor: selectedIndex === 0 ? '#1976d2' : 'transparent', // Change color when selected
