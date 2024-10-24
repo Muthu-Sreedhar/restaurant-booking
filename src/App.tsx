@@ -9,6 +9,8 @@ import ContactDetails from './components/ContactDetails';
 import Login from './components/Login';
 import PrivateRoute from './components/PrivateRouter';
 import { useAuth } from './context/AuthContext'; // Make sure to import your AuthContext
+import SignUp from './components/SignUp';
+import ForgotPassword from './components/ForgotPassword';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth(); // Check if user is authenticated
@@ -19,6 +21,8 @@ const App: React.FC = () => {
         {/* Redirect to Home if already authenticated */}
         <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={ <SignUp/>} />
+        <Route path="/forgotpassword" element={ <ForgotPassword/>} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/home" element={<MainLayout><Home /></MainLayout>} />
