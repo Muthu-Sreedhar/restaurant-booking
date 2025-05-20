@@ -1,100 +1,122 @@
-import React, { useState } from 'react';
-import { Box, Drawer, Grid2, List, ListItemButton, ListItemText, Stack } from '@mui/material';
-import { Link } from 'react-router-dom';
-import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
-import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
+import React, { useState } from "react";
+import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, IconButton, Grid } from "@mui/material"
+import { Avatar, Box, useMediaQuery, } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import PieChartIcon from "@mui/icons-material/PieChart";
+import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import HotelOutlinedIcon from "@mui/icons-material/HotelOutlined";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import { Menu as MenuIcon, Close as CloseIcon} from "@mui/icons-material";
 
-const Sidebar: React.FC = () => {
-    const [reduceSideBar, setReduceSideBar] = useState<any>(false);
-    const [selectedIndex, setSelectedIndex] = useState<any>(null);
 
-    const handleListItemClick = (index: number) => {
-        setSelectedIndex(index);
-    };
+const SideBar = () => {
+  const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const iconSize = isSmallScreen ? "small" : "medium";
+  const iconData = [
+    { icon: <PieChartIcon fontSize={iconSize} />, link: "main", text: "Home" },
+    { icon: <GroupOutlinedIcon fontSize={iconSize} />, link: "team", text: "Team" },
+    { icon: <CalendarMonthOutlinedIcon fontSize={iconSize} />, link: "calender", text: "Calender" },
+    { icon: <AccessTimeIcon fontSize={iconSize} />, link: "clock", text: "Clock" },
+    { icon: <HotelOutlinedIcon fontSize={iconSize} />, link: "hotel", text: "Hotel" },
+    { icon: <ArticleOutlinedIcon fontSize={iconSize} />, link: "notes", text: "Notes" },
+    { icon: <SettingsOutlinedIcon fontSize={iconSize} />, link: "settings", text: "Settings" },
+  ];
+  const toggleDrawer = () => setOpen(!open);
 
-    const listItemStyles = (index: number) => ({
-        // backgroundColor: selectedIndex === index ? '#1976d2' : 'transparent',
-        color: selectedIndex === index ? 'blue' : '#757575',
-        transition: "transform 0.3s ease-in-out",
-        "&:hover": {
-            // transform: "scale(1.2)",
-            color: "blue",
-        }
-    });
+  return (
+    <>
+      {/* Mobile Menu Icon */}
+      <IconButton
+        onClick={toggleDrawer}
+        sx={{ position: "left", top: 16, right: 16, zIndex: 1300, color: "#000",
+          display: { sm: "none", lg: "none", xl: "none" }
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
 
-    return (
-        <Grid2 sx={{ width: !reduceSideBar ? "70px" : "180px", overflowY: "auto", height: 'calc(100vh - 64px - 28px)', position: "relative" }}>
-            <Box sx={{ pl: !reduceSideBar ? 0 : 4 }}>
-                {!reduceSideBar ? <img src="/logo.png" alt="React Logo" width={"70px"} height={"90px"} /> : <img src="/logo.png" alt="React Logo" width={"100px"} height={"100px"} />}
-            </Box>
-            <List>
-                <Stack spacing={!reduceSideBar ? 1 : 0} color={"#757575"}>
-                    <ListItemButton
-                        component={Link}
-                        to="/home"
-                        onClick={() => handleListItemClick(0)}
-                        sx={listItemStyles(0)}
-                    >
-                        {!reduceSideBar ? (
-                            <span className="material-symbols-outlined" title='Home'>home</span>
-                        ) : (
-                            <>
-                                <span className="material-symbols-outlined">home</span>
-                                &nbsp;<ListItemText primary="Home" />
-                            </>
-                        )}
-                    </ListItemButton>
-                    <ListItemButton
-                        component={Link}
-                        to="/about"
-                        onClick={() => handleListItemClick(1)}
-                        sx={listItemStyles(1)}
-                    >
-                        {!reduceSideBar ? (
-                            <span className="material-symbols-outlined" title='About'>dns</span>
-                        ) : (
-                            <>
-                                <span className="material-symbols-outlined" >dns</span>
-                                &nbsp;<ListItemText primary="About" />
-                            </>
-                        )}
-                    </ListItemButton>
-                    <ListItemButton
-                        component={Link}
-                        to="/contact"
-                        onClick={() => handleListItemClick(2)}
-                        sx={listItemStyles(2)}
-                    >
-                        {!reduceSideBar ? (
-                            <span className="material-symbols-outlined" title='User'>person</span>
-                        ) : (
-                            <>
-                                <span className="material-symbols-outlined">person</span>
-                                &nbsp;<ListItemText primary="User" />
-                            </>
-                        )}
-                    </ListItemButton>
-                </Stack>
-            </List>
-            <Box
-                sx={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    py: 1,
-                }}
+      {/* Mobile Sidebar */}
+      <Drawer anchor="right" open={open} onClose={toggleDrawer}>
+        <Grid container alignItems="center" justifyContent="space-between" sx={{ px: 2, py: 1 }}>
+          <Grid item>
+            <Avatar
+              sx={{
+                bgcolor: "#07075e",
+                width: { xs: 40, sm: 40, md: 50 },
+                height: { xs: 40, sm: 40, md: 50 },
+                fontSize: { xs: 12, sm: 14, md: 16 },
+              }}
             >
-                {reduceSideBar ? (
-                    <KeyboardArrowLeftOutlinedIcon onClick={() => { setReduceSideBar(false); }} />
-                ) : (
-                    <ChevronRightOutlinedIcon onClick={() => { setReduceSideBar(true); }} />
-                )}
-            </Box>
-        </Grid2>
-    );
+              CHM
+            </Avatar>
+          </Grid>
+          <Grid item>
+            <IconButton onClick={toggleDrawer} sx={{ color: "#000" }}>
+              <CloseIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <List sx={{ width: 250 }}>
+          {iconData.map(({ icon, link, text }) => (
+            <ListItemButton key={text} onClick={() => {}}>
+              <ListItemIcon> {icon} </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          ))}
+        </List>
+      </Drawer>
+
+      {/* Desktop Sidebar */}
+      <List
+        sx={{
+          position: "fixed", top: 0, left: 0, height: "100vh", 
+          width: { sm: 80, md: 90 }, padding: 0, margin: 0,
+          display: { xs: "none", sm: "flex" },
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          backgroundColor: "#fff",
+          borderRight: "1px solid #e0e0e0",
+          boxShadow: 2,
+          zIndex: 1100,
+        }}
+      >
+        <Avatar
+          sx={{
+            bgcolor: "#07075e",
+            width: { xs: 30, sm: 40, md: 50 },
+            height: { xs: 30, sm: 40, md: 50 },
+            fontSize: { xs: 12, sm: 14, md: 16 },
+            mt: 2, // margin top for spacing
+            mb: 2,
+          }}
+        >
+          CHM
+        </Avatar>
+        {iconData.map(({ icon, link, text }, index) => (
+          <IconButton
+            title={text}
+            key={index}
+            sx={{
+              color: "#00172d",
+              "&:hover": { transform: "scale(1.1)" },
+              transition: "transform 0.3s",
+              cursor: "pointer",
+              mb: 1,
+            }}
+          >
+            {icon}
+          </IconButton>
+        ))}
+      </List>
+
+    </>
+  );
 };
 
-export default Sidebar;
+export default SideBar;

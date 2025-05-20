@@ -1,42 +1,37 @@
-// src/layouts/MainLayout.tsx
-import React from 'react';
-
-import { Grid, Box } from '@mui/material';
-import Topbar from '../components/Topbar';
+// DashboardLayout.tsx
+import { Grid, Toolbar } from '@mui/material';
 import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
+import Topbar from '../components/Topbar';
 
-const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const drawerWidth = 80;
 
-    
-    return (
-        <>
-            <Grid container direction="column" sx={{ }}>
-                {/* Topbar */}
-                <Grid item >
-                    <Topbar />
-                </Grid>
+const DashboardLayout = () => {
+  return (
+    <Grid container>
+      {/* Sidebar */}
+      <Grid item sx={{ 
+        width: {
+          xs: 0,
+          sm: 25,
+          md: 15,
+          lg: 22,
+          xl: 22
+        }, 
+        // flexShrink: 0 
+        }}>
+        <Sidebar />
+      </Grid>
 
-                {/* Content with Sidebar */}
-                <Grid container item sx={{ flexGrow: 1 }}>
-                    {/* Sidebar */}
-                    <Grid item sx={{height: 'calc(100vh - 64px - 60px)' }}> {/* Adjust height calculation based on Topbar and Footer height */}
-                        <Sidebar />
-                    </Grid>
-
-                    {/* Main Content */}
-                    <Grid item sx={{ flexGrow: 1, p: 2 }}>
-                        <Box >{children}</Box>
-                    </Grid>
-                </Grid>
-
-                {/* Footer */}
-                <Grid item >
-                    <Footer />
-                </Grid>
-            </Grid>
-        </>
-    );
+      {/* Main Content Area */}
+      <Grid item xs 
+        sx={{ ml: `${drawerWidth}px` }}
+      >
+        <Topbar />
+        <Toolbar /> {/* Optional spacer if Topbar is fixed */}
+        {/* Your main content here */}
+      </Grid>
+    </Grid>
+  );
 };
 
-export default MainLayout;
+export default DashboardLayout;

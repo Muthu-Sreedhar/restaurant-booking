@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRouter';
 import { useAuth } from './context/AuthContext'; // Make sure to import your AuthContext
 import SignUp from './components/SignUp';
 import ForgotPassword from './components/ForgotPassword';
+import DashboardLayout from '../src/layouts/MainLayout';
 
 const App: React.FC = () => {
   const { isAuthenticated } = useAuth(); // Check if user is authenticated
@@ -19,20 +20,25 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         {/* Redirect to Home if already authenticated */}
-        <Route path="/" element={isAuthenticated ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+        {/* <Route path="/" element={isAuthenticated ? <Navigate to="/" /> : <Navigate to="/login" />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={ <SignUp/>} />
         <Route path="/forgotpassword" element={ <ForgotPassword/>} />
 
-        <Route element={<PrivateRoute />}>
+        {/* <Route element={<PrivateRoute />}>
           <Route path="/home" element={<MainLayout><Home /></MainLayout>} />
-          <Route path="/about" element={<MainLayout><About /></MainLayout>} />
-          <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-          <Route path="/contact/details/:id" element={<MainLayout><ContactDetails /></MainLayout>} />
+        </Route> */}
+
+        <Route path="/" element={<DashboardLayout />}>
+          {/* <Route index element={<Navigate to="/calendar" replace />} /> */}
+          {/* <Route path="calendar" element={<CalendarPage />} />
+          <Route path="other" element={<OtherPage />} /> */}
+          {/* Add more routes as needed */}
         </Route>
       </Routes>
     </Router>
   );
 };
+
 
 export default App;
